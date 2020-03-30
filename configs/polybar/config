@@ -165,8 +165,7 @@ type = internal/temperature
 interval = 0.5
 
 thermal-zone = 10
-; TODO: make this dynamic
-hwmon-path = /sys/devices/virtual/hwmon/hwmon5/temp1_input
+hwmon-path = ${env:CPU_TEMP:}
 
 base-temperature = 55
 warn-temperature = 90
@@ -189,7 +188,7 @@ label-warn-foreground = #9999ff
 
 [module/cpu_fan]
 type = custom/script
-exec = ~/.polybar/scripts/cpu-fan.sh
+exec = cat $CPU_FAN
 interval = 3
 
 format = <label>
