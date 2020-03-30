@@ -1,0 +1,42 @@
+#!/bin/env ruby
+
+def argfail
+  STDERR.puts "Please specify one of (arm|disarm)"
+  exit 1
+end
+
+def permfail
+  STDERR.puts "You must be root"
+  exit 1
+end
+
+# Check root
+permfail unless Process.uid == 0
+
+# Check the commands
+argfail if ARGV.length < 1
+
+def disarm
+  puts "Disarming Firewall"
+  `cd /home/vinnie/firewall && sudo /home/vinnie/firewall/open.sh`
+end
+
+def arm
+  puts "Arming Firewall"
+  `cd /home/vinnie/firewall && sudo /home/vinnie/firewall/arm.sh`
+end
+
+def lockdown
+  `cd /home/vinnie/firewall && sudo /home/vinnie/firewall/lockdown.sh`
+end
+
+case ARGV[0]
+when "disarm"
+  disarm
+when "arm"
+  arm
+when "lockdown"
+  lockdown
+else
+  argfail
+end

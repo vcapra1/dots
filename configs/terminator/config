@@ -1,0 +1,72 @@
+[global_config]
+  homogeneous_tabbar = False
+  inactive_color_offset = 1.0
+  scroll_tabbar = True
+  tab_position = bottom
+  title_font = Hack Nerd Font Mono 8
+  title_inactive_bg_color = "#a8a8a8"
+  title_transmit_bg_color = "#a8a8a8"
+  title_transmit_fg_color = "#000000"
+  title_use_system_font = False
+[keybindings]
+  full_screen = <Super>f
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = Arc Dark (Custom)
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      size = 900, 600
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    background_color = "#0f1014"
+    background_darkness = 0.85
+    cursor_color = "#adb3ba"
+    cursor_color_fg = False
+    cursor_shape = underline
+    custom_command = /usr/bin/zsh --login
+    font = MesloLGS NF 8
+    foreground_color = "#bec4cc"
+    icon_bell = False
+    login_shell = True
+    palette = "#272b33:#bb3739:#4c8b4c:#cc8e2a:#3c6393:#8a50a2:#447bbc:#8c8c8d:#51576b:#bb5c69:#90b071:#d2a24f:#bc91c4:#90698b:#5fa4bc:#d1d1d1"
+    scrollback_infinite = True
+    scrollback_lines = 100000
+    scrollbar_position = hidden
+    show_titlebar = False
+    use_system_font = False
+  [[NoLogin]]
+    background_color = "#0F1014"
+    background_darkness = 0.21
+    cursor_color = "#adb3ba"
+    custom_command = /usr/bin/zsh
+    font = MesloLGS NF 8
+    foreground_color = "#bec4cc"
+    icon_bell = False
+    palette = "#272B33:#bb3739:#4c8b4c:#cc8e2a:#3c6393:#8a50a2:#447bbc:#8c8c8d:#51576b:#bb5c69:#90b071:#d2a24f:#bc91c4:#90698b:#5fa4bc:#d1d1d1"
+    scrollback_infinite = True
+    scrollback_lines = 100000
+    scrollbar_position = hidden
+    show_titlebar = False
+    use_system_font = False
+  [[lighter]]
+    background_color = "#282c34"
+    background_darkness = 0.62
+    cursor_color = "#aaaaaa"
+    cursor_color_fg = False
+    cursor_shape = underline
+    custom_command = /usr/bin/zsh --login
+    font = Hack 8
+    foreground_color = "#d3dae3"
+    icon_bell = False
+    login_shell = True
+    palette = "#4b5164:#e14245:#5ca75b:#f6ab32:#4877b1:#a660c3:#5294e2:#a9a9aa:#616981:#e16f7e:#add488:#fdc35f:#e2afec:#ad7fa8:#73c5e2:#fcfcfc"
+    scrollback_infinite = True
+    scrollback_lines = 100000
+    scrollbar_position = hidden
+    show_titlebar = False
+    use_system_font = False

@@ -1,0 +1,248 @@
+#!/usr/bin/ruby
+
+## Profiles
+
+$WALL = "~/Pictures/Wallpapers/ArchMetal.png"
+#$WALL = "\"~/Pictures/Wallpapers/Abstract Shapes.png\""
+#$WALL = "~/Pictures/Wallpapers/Black.png"
+
+def mode name, displays={}
+#    `i3-msg bar mode dock all`
+#    `i3-msg bar mode hide internal`
+#    `i3-msg bar mode hide presenter`
+
+    case name
+    when :laptop
+        `/usr/bin/xrandr #{displays.map do |output, disp|
+            if disp[:internal] then
+                "--output #{output} --auto --primary"
+            else
+                "--output #{output} --off"
+            end
+        end.join " "}`
+
+        `feh --bg-fill #{$WALL}`
+
+
+#        `i3-msg bar mode dock internal`
+#        `i3-msg bar mode invisible all`
+#        `i3-msg bar mode invisible presenter`
+    when :home
+        # Put DisplayPort to left of HDMI, Laptop after first external
+        displays = displays.sort_by do |output, disp|
+            if disp[:internal] then
+                1
+            elsif output =~ /DP/ and disp[:connected] then
+                0
+            elsif output =~ /HDMI/ and disp[:connected] then
+                2
+            else
+                3
+            end
+        end
+
+        prev = nil
+        `/usr/bin/xrandr #{displays.map do |output, disp|
+            if not disp[:connected] then
+                "--output #{output} --off"
+            elsif not prev then
+                prev = output
+                "--output #{output} --auto --primary"
+            else
+                temp = prev
+                prev = output
+                "--output #{output} --auto --right-of #{temp}"
+            end
+        end.join " "}`
+
+        `feh --bg-fill #{$WALL}`
+#        `i3-msg bar mode hide internal`
+#        `i3-msg bar mode dock all`
+#        `i3-msg bar mode invisible presenter`
+=begin
+    when :center
+        # Put DisplayPort to left and HDMI to right of laptop
+        displays = displays.sort_by do |output, disp|
+            if disp[:internal] then
+                1
+            elsif output =~ /DP/ and disp[:connected] then
+                0
+            elsif output =~ /HDMI/ and disp[:connected] then
+                2
+            else
+                3
+            end
+        end
+
+        prev = nil
+        `/usr/bin/xrandr #{displays.map do |output, disp|
+            if not disp[:connected] then
+                "--output #{output} --off"
+            elsif not prev then
+                prev = output
+                "--output #{output} --auto --primary"
+            else
+                temp = prev
+                prev = output
+                "--output #{output} --auto --right-of #{temp}"
+            end
+        end.join " "}`
+
+        `feh --bg-fill #{$WALL}`
+        `i3-msg bar mode hide internal`
+        `i3-msg bar mode dock all`
+        `i3-msg bar mode invisible presenter`
+    when :above
+        # Put DisplayPort and HDMI above laptop
+        displays = displays.sort_by do |output, disp|
+            if disp[:internal] then
+                1
+            elsif output =~ /DP/ and disp[:connected] then
+                0
+            elsif output =~ /HDMI/ and disp[:connected] then
+                2
+            else
+                3
+            end
+        end
+
+        prev = nil
+        `/usr/bin/xrandr #{displays.map do |output, disp|
+            if not disp[:connected] then
+                "--output #{output} --off"
+            elsif not prev then
+                prev = output
+                "--output #{output} --auto --primary"
+            else
+                temp = prev
+                prev = output
+                "--output #{output} --auto --right-of #{temp}"
+            end
+        end.join " "}`
+
+        `feh --bg-fill #{$WALL}`
+        `i3-msg bar mode hide internal`
+        `i3-msg bar mode dock all`
+        `i3-msg bar mode invisible presenter`
+=end
+    when :first
+        # Put DisplayPort to left of HDMI
+        displays = displays.sort_by do |output, disp|
+            if disp[:internal] then
+                0
+            elsif output =~ /DP/ and disp[:connected] then
+                1
+            elsif output =~ /HDMI/ and disp[:connected] then
+                2
+            else
+                3
+            end
+        end
+
+        first = true
+        `/usr/bin/xrandr #{displays.map do |output, disp|
+            if disp[:internal] or not disp[:connected] then
+                "--output #{output} --off"
+            elsif first then
+                first = false
+                "--output #{output} --auto --primary"
+            else
+                "--output #{output} --off"
+            end
+        end.join " "}`
+
+        `feh --bg-fill #{$WALL}`
+#        `i3-msg bar mode hide internal`
+#        `i3-msg bar mode dock all`
+#        `i3-msg bar mode invisible presenter`
+    when :presenter
+        internal = displays.select { |k, v| v[:internal] }[0]
+        first = nil
+        `/usr/bin/xrandr #{displays.map do |output, disp|
+            if disp[:internal] then
+                internal = output
+                "--output #{output} --auto --primary"
+            elsif disp[:connected] and not first then
+                first = output
+                "--output #{output} --auto --above #{internal}"
+            elsif disp[:connected] then
+                "--output #{output} --auto --same-as #{first}"
+            else
+                "--output #{output} --off"
+            end
+        end.join " "}`
+
+        `feh --bg-fill #{$WALL} #{$WALL} ~/Pictures/Wallpapers/Black.png`
+#        `i3-msg bar mode dock internal`
+#        `i3-msg bar mode invisible all`
+#        `i3-msg bar mode hide presenter`
+    when :mirror
+        internal = displays.keys.select { |k| displays[k][:internal] }[0]
+        `/usr/bin/xrandr #{displays.map do |output, disp|
+            if disp[:internal] then
+                "--output #{output} --auto --primary"
+            elsif disp[:connected] then
+                "--output #{output} --auto --same-as #{internal}"
+            else
+                "--output #{output} --off"
+            end
+        end.join " "}`
+
+#        `i3-msg bar mode hide internal`
+#        `i3-msg bar mode dock all`
+#        `i3-msg bar mode invisible presenter`
+    end
+
+    `/home/vinnie/.config/polybar/launch.sh`
+end
+
+# Get list of connected displays
+connected = `/usr/bin/xrandr | /home/vinnie/.cargo/bin/rg "\\sconnected" | /home/vinnie/.cargo/bin/rg -o "^[\\w-]+"`.split("\n")
+external = `/usr/bin/xrandr | /home/vinnie/.cargo/bin/rg "(dis)?connected" | /home/vinnie/.cargo/bin/rg -o "^[\\w-]+"`.split("\n")
+
+displays = Hash::new
+
+external.each do |x|
+    displays[x] = {
+        connected: false,
+        internal: false
+    }
+end
+
+connected.each do |x|
+    displays[x][:connected] = true
+end
+
+displays["eDP-1"][:internal] = true
+
+if displays.select {|d, x| x[:connected] && !x[:internal]}.length == 0 then
+    # No external displays connected
+    mode :laptop, displays
+else case ARGV[0]
+    when "laptop"
+        # Only the internal laptop screen is on
+        mode :laptop, displays
+    when "home"
+        # One or two external monitors, DP left of HDMI, left (DP) is primary
+        mode :home, displays
+=begin
+    when "center"
+        # Laptop between two external monitors
+        mode :center, displays
+    when "above"
+        # Laptop below two external monitors
+        mode :above, displays
+=end
+    when "first"
+        # One external monitor
+        mode :first, displays
+    when "presenter"
+        # One or more external monitors all the same, laptop is primary
+        mode :presenter, displays
+    when "mirror"
+        # Mirror all connected displays, laptop is primary
+        mode :mirror, displays
+    else
+        exit 1
+    end
+end

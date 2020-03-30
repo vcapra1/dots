@@ -1,0 +1,5 @@
+#!/bin/sh
+
+if [[ $(cat /proc/acpi/wakeup | grep LID0) == *enabled* ]]; then
+    echo LID0 > /proc/acpi/wakeup
+fi

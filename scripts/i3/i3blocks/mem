@@ -1,0 +1,27 @@
+#!/usr/bin/ruby
+
+ram = `free | grep "Mem" | awk -n '{print int($3/$2*10000)/100}'`.strip.to_f
+swap = `free | grep "Swap" | awk -n '{print int($3/$2*10000)/100}'`.strip.to_f
+
+ram_color = '#888833'
+if ram > 80 then
+    ram_color = '#ff5555'
+end
+
+swap_color = '#aa55aa'
+if swap > 80 then
+    swap_color = '#ff5555'
+end
+
+z1 = ""
+z2 = ""
+if ram < 10 then
+    z1 = "0"
+end
+
+if swap < 10 then
+    z2 = "0"
+end
+
+puts "<span color='#{ram_color}'>  #{z1}#{'%d' % ram}%</span>  <span color='#{swap_color}'>  #{z2}#{'%d' % swap}%</span>"
+puts "<span color='#{ram_color}'>  #{z1}#{'%d' % ram}%</span>"

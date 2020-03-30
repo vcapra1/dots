@@ -1,0 +1,4 @@
+#!/bin/sh
+
+import -window root $(date +"/home/vinnie/Pictures/screenshot_%Y-%m-%d-%H:%M:%S.jpg")
+

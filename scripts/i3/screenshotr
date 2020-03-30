@@ -1,0 +1,3 @@
+#!/bin/sh
+
+import $(date +"/home/vinnie/Pictures/screenshot_%Y-%m-%d-%H:%M:%S.jpg")

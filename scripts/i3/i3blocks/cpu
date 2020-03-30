@@ -1,0 +1,40 @@
+#!/usr/bin/ruby
+
+load = `/home/vinnie/.i3/scripts/i3blocks/cpu_load`.strip.to_f
+z = ""
+
+if load < 10
+    z = "0"
+end
+
+load_color = "#99eeff"
+if load > 80.0 then
+    load_color = "#ff5555"
+elsif load > 50.0 then
+    load_color = "#dddd55"
+end
+
+temp = `sensors | grep CPU | awk '{print $2}' | grep -Eo "[0-9]+" | head -1`.strip.to_i
+
+temp_color = "#77aa77"
+temp_icon = ""
+
+if temp > 90 then
+    temp_color = "#ff5555"
+    temp_icon = ""
+elsif temp > 75 then
+    temp_color = "#dddd55"
+    temp_icon = ""
+elsif temp > 65 then
+    temp_color = "#dddd55"
+    temp_icon = ""
+elsif temp > 45 then
+    temp_icon = ""
+end
+
+fan = `sensors | grep "Processor Fan" | grep -oE "[0-9]+" | head -1`.strip.to_i
+
+fan_color = "#4466aa"
+
+puts "<span color='#{load_color}'>  #{z}#{'%d' % load}%</span>  <span color='#{temp_color}'>#{temp_icon} #{temp}°C</span>  <span color='#{fan_color}'>  #{fan} RPM</span>"
+puts "<span color='#{load_color}'>  #{z}#{'%d' % load}%</span>  <span color='#{temp_color}'>#{temp_icon} #{temp}°C</span>"

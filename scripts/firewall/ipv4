@@ -1,0 +1,87 @@
+*filter
+
+###############################
+# By default, drop everything #
+###############################
+
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT DROP
+
+######################################################
+# Allow traffic from already-established connections #
+######################################################
+
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+###############################################################
+# Allow local traffic and ssh to devices on the local network #
+###############################################################
+
+-A INPUT -p tcp -s localhost -j ACCEPT
+-A OUTPUT -p tcp --dport 22 -s 192.168.0.0/24 -j ACCEPT
+
+-A OUTPUT -o lo -j ACCEPT
+
+###############################################
+# Allow ICMP requests through the VPN devices #
+###############################################
+
+-A OUTPUT -o tun0 -p icmp -j ACCEPT
+-A OUTPUT -o vpn0 -p icmp -j ACCEPT
+
+################################
+# Allow requests to the router #
+################################
+
+-A OUTPUT -d 192.168.0.0/8 -j ACCEPT
+
+###########################################
+# Allow requests to NordVPN's DNS servers #
+###########################################
+
+-A OUTPUT -d 103.86.96.100 -j ACCEPT
+-A OUTPUT -d 103.86.99.100 -j ACCEPT
+
+#########################################
+# Allow requests to umd.edu DNS servers #
+#########################################
+
+-A OUTPUT -d 128.8.74.2 -j ACCEPT
+-A OUTPUT -d 128.8.76.2 -j ACCEPT
+
+#################################
+# Allow requests to vpn.umd.edu #
+#################################
+
+-A OUTPUT -d 128.8.7.229 -j ACCEPT
+-A OUTPUT -d 128.8.7.235 -j ACCEPT
+
+##################################
+# Allow requests to Google's DNS #
+##################################
+
+-A OUTPUT -d 8.8.8.8 -j ACCEPT
+
+#####################################
+# Allow requests to the NordVPN API #
+#####################################
+
+-A OUTPUT -d 104.17.49.74 -j ACCEPT
+-A OUTPUT -d 104.17.50.74 -j ACCEPT
+
+#####################################################
+# Allow all UDP traffic through NordVPN's port 1194 #
+#####################################################
+
+-A OUTPUT -p udp -m udp --dport 1194 -j ACCEPT
+
+#########################################
+# Allow all traffic through VPN tunnels #
+#########################################
+
+-A OUTPUT -o tun0 -j ACCEPT
+-A OUTPUT -o vpn0 -j ACCEPT
+
+COMMIT

@@ -1,0 +1,11 @@
+[Unit]
+Description=Start Parcellite daemonj
+
+[Service]
+Type=simple
+Restart=always
+User=vinnie
+ExecStart=/usr/bin/parcellite
+
+[Install]
+WantedBy=multi-user.target

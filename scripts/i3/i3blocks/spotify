@@ -1,0 +1,42 @@
+#!/usr/bin/ruby
+
+def sanitize str
+    str.sub("&", "&amp;").sub("<", "&lt;").sub(">", "&gt;")
+end
+
+status = `/home/vinnie/.i3/scripts/i3blocks/spotify_info.sh status || echo "Not Playing"`.strip
+
+case status
+when "Playing"
+    song = sanitize `/home/vinnie/.i3/scripts/i3blocks/spotify_info.sh song`.strip
+    artist = sanitize `/home/vinnie/.i3/scripts/i3blocks/spotify_info.sh artist`.strip
+
+    if song.length > 40 then
+        song = "#{song[0...37].strip}..."
+    end
+
+    if artist.length > 40 then
+        artist = "#{artist[0...37].strip}..."
+    end
+
+    puts "  #{song} - #{artist}"
+    puts "  #{song} - #{artist}"
+    puts "#1ed761"
+when "Paused"
+    song = sanitize `/home/vinnie/.i3/scripts/i3blocks/spotify_info.sh song`.strip
+    artist = sanitize `/home/vinnie/.i3/scripts/i3blocks/spotify_info.sh artist`.strip
+
+    if song.length > 40 then
+        song = "#{song[0...37].strip}..."
+    end
+
+    if artist.length > 40 then
+        artist = "#{artist[0...37].strip}..."
+    end
+
+    puts "  #{song} - #{artist}"
+    puts "  #{song} - #{artist}"
+    puts "#ffffff55"
+when "Not Playing"
+    exit 0
+end

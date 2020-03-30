@@ -1,0 +1,10 @@
+[Unit]
+Description=Set permissions for backlight
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/bin/bash -c "/bin/chmod a+w /sys/class/backlight/intel_backlight/brightness"
+
+[Install]
+WantedBy=multi-user.target

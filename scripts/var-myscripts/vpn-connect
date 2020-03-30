@@ -1,0 +1,5 @@
+#!/bin/env ruby
+
+conname = File.read "/var/myscripts/current_connection"
+
+`nmcli con up #{conname}`

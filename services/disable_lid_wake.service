@@ -1,0 +1,8 @@
+[Unit]
+Description=Disable Lid Wake On Open
+
+[Service]
+ExecStart=/var/myscripts/disable_lid_wake
+
+[Install]
+WantedBy=multi-user.target 

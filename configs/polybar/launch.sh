@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+killall -q polybar
+while pgrep -u $UID -x polybar > /dev/null; do sleep 0.0; done
+
+for m in $(polybar --list-monitors | cut -d":" -f1); do
+    MONITOR=$m polybar --reload bottom &
+#    echo $m
+done
+
+# Launch Polybar, using default config location ~/.config/polybar/config
+
+#polybar stat &
+
+#echo "Polybar launched..."

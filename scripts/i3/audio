@@ -1,0 +1,33 @@
+#!/usr/bin/ruby
+
+exit 1 if ARGV.length < 1
+
+command = ARGV[0]
+step = 5
+
+if command == "inc_fine" then
+    step = 1
+    command = "inc"
+elsif command  == "dec_fine" then
+    step = 1
+    command = "dec"
+end
+
+case command
+when "inc"
+    `pactl set-sink-mute @DEFAULT_SINK@ 0`
+    vol = `pactl list sinks | /home/vinnie/.cargo/bin/rg -F -A20 "$(pactl info | /home/vinnie/.cargo/bin/rg "Default Sink" | cut -b15-)" | /home/vinnie/.cargo/bin/rg "Volume" | head -1 | /home/vinnie/.cargo/bin/rg "[0-9]+%" -o | head -1 | /home/vinnie/.cargo/bin/rg -o "[0-9]+"`
+    if vol =~ /^([0-9]+)$/ then
+        if $1.to_i > (100 - step) then
+            `pactl set-sink-volume @DEFAULT_SINK@ 100%`
+            exit 0
+        end
+    end
+    `pactl set-sink-volume @DEFAULT_SINK@ +#{step}%`
+when "dec"
+    `pactl set-sink-mute @DEFAULT_SINK@ 0`
+    `pactl set-sink-volume @DEFAULT_SINK@ -#{step}%`
+when "zero"
+    `pactl set-sink-volume @DEFAULT_SINK@ 0`
+    `pactl set-sink-mute @DEFAULT_SINK@ 1`
+end

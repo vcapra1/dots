@@ -1,0 +1,12 @@
+#!/usr/bin/ruby
+
+list = `bluetoothctl devices | cut -d' ' -f2`.split "\n"
+
+count = 0
+list.each do |mac|
+    if `bluetoothctl info #{mac} | grep Connected` =~ /yes/ then
+        count += 1
+    end
+end
+
+puts "  #{count}"

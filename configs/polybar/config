@@ -1,0 +1,417 @@
+[colors]
+accent = #fba922
+
+[bar/bottom]
+monitor = ${env:MONITOR:}
+bottom = true
+width = 100%
+height = 16
+
+background = #00000000
+foreground = #eefafafa
+
+;overline-size = 3
+;overline-color = ${colors.accent}
+;underline-size = 3
+;underline-color = ${colors.accent}
+
+;border-color = #ff0000
+;border-top = 1
+;border-top-color = #3d3d3d
+;border-bottom = 0
+;border-bottom-color = #333333
+
+spacing = 2
+;padding-right = 4
+padding-left = 0
+padding-right = 0
+module-margin-left = 2
+module-margin-right = 2
+
+font-0 = NotoSans-Regular:size=7.5;0
+font-1 = Font Awesome 5 Pro Regular:size=8;1
+font-2 = Hack:size=5;2
+font-3 = Hack:size=5;0.5
+font-4 = NotoSans-Regular:size=7;1
+font-5 = Font Awesome 5 Brands Regular:size=8;1
+font-6 = Noto Sans:style=Bold:size=7.5;0
+font-7 = font\-logos:size=10;0.5
+
+modules-left = i3
+modules-right = spotify sep cpu_usage cpu_temp cpu_fan sep memory swap sep bluetooth sep wifi sep volume sep battery sep date sep arch
+
+;[module/xbacklight]
+;type = internal/xbacklight
+;output = eDP-1
+;format = <ramp> <bar>
+;
+;ramp-0 = 
+;ramp-0-foreground = #666
+;ramp-1 = 
+;ramp-1-foreground = #999
+;ramp-2 = 
+;ramp-2-foreground = #fff
+;
+;bar-width = 12
+;bar-indicator = |
+;bar-indicator-font = 6
+;bar-indicator-foreground = #bbffffff
+;bar-fill = ─
+;bar-fill-font = 6
+;bar-fill-foreground = #9f78e1
+;bar-empty = ─
+;bar-empty-font = 6
+;bar-empty-foreground = #44
+
+
+;[module/backlight]
+;type = internal/backlight
+;card = intel_backlight
+;format = <ramp> <label>
+;ramp-0 = 
+;ramp-1 = 
+;ramp-2 = 
+;ramp-foreground = #666
+;interactive = true
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+pin-workspaces = true
+
+label-focused = %name%
+label-unfocused = %name%
+label-urgent = %name%
+label-visible = %name%
+
+label-focused-foreground = #f3f3f3
+label-unfocused-foreground = #f3f3f3
+label-urgent-foreground = #f3f3f3
+label-visible-foreground = #f3f3f3
+
+label-focused-background = #6f6fbf
+label-unfocused-background = #446f6fbf
+label-urgent-background = #bd2c40
+label-visible-background = #666f6fbf
+
+label-focused-font = 5
+label-unfocused-font = 5
+label-urgent-font = 5
+label-visible-font = 5
+
+label-focused-padding = 2
+label-unfocused-padding = 2
+label-urgent-padding = 2
+label-visible-padding = 2
+
+label-mode-padding = 2
+label-mode-background = #ff3333
+
+
+[module/spotify]
+type = custom/script
+exec = ~/.polybar/scripts/spotify.sh
+
+tail = true
+
+format = <label>
+format-font = 1
+
+label = %output%
+
+[module/sep]
+type = custom/text
+content = |
+content-foreground = #55ffffff
+content-padding = 0
+
+[module/cpu_usage]
+type = internal/cpu
+interval = .1
+
+format = <label> <ramp-coreload>
+
+label = 
+label-font = 2
+label-foreground = #9999ff
+
+ramp-coreload-0 = ▁
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+ramp-coreload-7 = █
+ramp-coreload-0-font = 3
+ramp-coreload-1-font = 3
+ramp-coreload-2-font = 3
+ramp-coreload-3-font = 3
+ramp-coreload-4-font = 3
+ramp-coreload-5-font = 3
+ramp-coreload-6-font = 3
+ramp-coreload-7-font = 3
+ramp-coreload-0-foreground = #9999ff
+ramp-coreload-1-foreground = #9999ff
+ramp-coreload-2-foreground = #9999ff
+ramp-coreload-3-foreground = #9999ff
+ramp-coreload-4-foreground = #9999ff
+ramp-coreload-5-foreground = #9999ff
+ramp-coreload-6-foreground = #9999ff
+ramp-coreload-7-foreground = #9999ff
+
+[module/cpu_temp]
+type = internal/temperature
+interval = 0.5
+
+thermal-zone = 10
+; TODO: make this dynamic
+hwmon-path = /sys/devices/virtual/hwmon/hwmon5/temp1_input
+
+base-temperature = 55
+warn-temperature = 90
+
+format = <ramp> <label>
+format-warn = <ramp> <label-warn>
+
+label = %temperature-c%
+label-warn = %temperature-c%
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-3 = 
+ramp-4 = 
+
+label-foreground = #9999ff
+ramp-foreground = #9999ff
+label-warn-foreground = #9999ff
+
+[module/cpu_fan]
+type = custom/script
+exec = ~/.polybar/scripts/cpu-fan.sh
+interval = 3
+
+format = <label>
+format-foreground = #9999ff
+
+label =   %output% RPM
+
+[module/memory]
+type = internal/memory
+interval = 0.5
+format = <label> <bar-used>
+
+label = 
+label-font = 3
+label-foreground = #ffa726
+
+bar-used-width = 16
+bar-used-gradient = false
+bar-used-indicator = 
+bar-used-indicator-font = 4
+bar-used-fill = ▌
+bar-used-empty = ▌
+bar-used-fill-font = 4
+bar-used-empty-font = 4
+bar-used-fill-foreground = #ffa726
+bar-used-empty-foreground = #44ffa726
+
+[module/swap]
+type = internal/memory
+interval = 0.5
+format = <label> <bar-swap-used>
+
+label = 
+label-font = 3
+label-foreground = #7D4A91
+
+bar-swap-used-width = 16
+bar-swap-used-gradient = false
+bar-swap-used-indicator = 
+bar-swap-used-indicator-font = 4
+bar-swap-used-fill = ▌
+bar-swap-used-empty = ▌
+bar-swap-used-fill-font = 4
+bar-swap-used-empty-font = 4
+bar-swap-used-fill-foreground = #7D4A91
+bar-swap-used-empty-foreground = #447D4A91
+
+[module/bluetooth]
+type = custom/script
+interval = 2
+exec = ~/.polybar/scripts/bluetooth.sh
+format = <label>
+label = %output%
+
+[module/wifi]
+type = internal/network
+interface = wlp2s0
+interval = 2.0
+;ping-interval = 10
+
+format-connected = <ramp-signal> <label-connected>
+format-disconnected = <label-disconnected>
+
+label-connected = %essid%
+label-connected-font = 1
+label-connected-foreground = #4DD14D
+
+label-disconnected =  
+label-disconnected-font = 2
+label-disconnected-foreground = #66
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-foreground = #4DD14D
+
+[module/volume]
+type = internal/pulseaudio
+
+use-ui-max = false
+
+format-volume = <ramp-volume> <label-volume>
+format-muted = <label-muted>
+
+label-muted =    %percentage%%
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
+label-volume-foreground = #aaaaff
+ramp-volume-foreground = #aaaaff
+label-muted-foreground = #66aaaaff
+
+[module/battery]
+type = internal/battery
+
+full-at = 97
+
+battery = BAT0
+adapter = AC
+
+poll-interval = 5
+
+format-charging = <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+format-full = <label-full>
+
+label-charging-font = 1
+label-discharging-font = 1
+label-full-font = 1
+
+animation-charging-font = 2
+ramp-discharging-font = 2
+
+ramp-capacity-0 = %{F#cf3333}
+ramp-capacity-1 = %{F#cf3333}
+ramp-capacity-2 = %{F#5FA052}
+ramp-capacity-3 = %{F#5FA052}
+ramp-capacity-4 = %{F#5FA052}
+
+label-charging = %{F#5FA052}   %percentage%%%{F-}
+label-discharging = %percentage%%%{F-}
+label-full = %{F#5FA052}   %percentage%%%{F-}
+
+[module/date]
+type = internal/date
+interval = .1
+
+format = <label>
+format-foreground = #eeeeee
+
+label = "  %date%      %time%"
+label-font = 1
+date = %Y-%m-%d
+time = %H:%M:%S %Z
+
+[module/arch]
+type = custom/text
+
+content = "    "
+content-foreground = #1793D1
+content-padding = 0
+content-font = 8
+
+
+
+
+[module/mpd]
+type = internal/mpd
+format-online = <bar-progress>  <icon-prev> <icon-stop> <toggle> <icon-next>  <label-song>
+format-online-overline = ${root.background}
+format-online-underline = ${root.background}
+format-offline = <label-offline>
+label-offline = mpd is off
+
+icon-play = 
+icon-pause = 
+icon-stop = 
+icon-prev = 
+icon-next = 
+icon-random = 
+icon-repeat = 
+
+toggle-on-foreground =
+toggle-off-foreground = #55
+
+bar-progress-width = 45
+bar-progress-format = %{+o +u}%fill%%{-o -u}%indicator%%{+o +u}%empty%%{-u -o}
+; bar-progress-indicator = |
+bar-progress-indicator = █
+bar-progress-indicator-foreground = #ff
+bar-progress-indicator-font = 3
+; bar-progress-fill = ─
+bar-progress-fill = █
+bar-progress-fill-foreground = #bb
+bar-progress-fill-font = 3
+; bar-progress-empty = ─
+bar-progress-empty = ▒
+bar-progress-empty-font = 3
+bar-progress-empty-foreground = #44
+
+
+[module/xwindow]
+type = internal/xwindow
+label-maxlen = 75
+label-foreground = #bbb
+
+[module/powermenu]
+type = custom/menu
+
+format-padding = 3
+format-background = #000
+format-foreground = #fff
+
+label-open = 
+label-close = 
+label-separator = " - "
+
+menu-0-0 = Terminate WM
+menu-0-0-foreground = ${colors.accent}
+menu-0-0-exec = bspc quit -1
+menu-0-1 = Reboot
+menu-0-1-foreground = ${colors.accent}
+menu-0-1-exec = menu-open-1
+menu-0-2 = Power off
+menu-0-2-foreground = ${colors.accent}
+menu-0-2-exec = menu-open-2
+
+menu-1-0 = Cancel
+menu-1-0-foreground = ${colors.accent}
+menu-1-0-exec = menu-open-0
+menu-1-1 = Reboot
+menu-1-1-foreground = ${colors.accent}
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = Power off
+menu-2-0-foreground = ${colors.accent}
+menu-2-0-exec = sudo poweroff
+menu-2-1 = Cancel
+menu-2-1-foreground = ${colors.accent}
+menu-2-1-exec = menu-open-0
+
+; vim:ft=dosini

@@ -1,0 +1,146 @@
+#!/bin/env ruby
+
+require 'net/http'
+require 'uri'
+require 'json'
+require 'securerandom'
+
+$UMD_PASS = File.read("/home/vinnie/umdpass").strip
+
+def nord_config_file server
+  <<END_FILE
+[connection]
+id=NordVPN
+uuid=#{SecureRandom.uuid}
+type=vpn
+permissions=
+
+
+[vpn]
+auth=SHA512
+ca=/home/vinnie/.cert/nm-openvpn/nordvpn-auto-ca.pem
+cipher=AES-256-CBC
+comp-lzo=no-by-default
+connection-type=password
+dev=tun
+mssfix=1450
+password-flags=0
+ping=15
+ping-restart=0
+remote=#{server}:1194
+remote-cert-tls=server
+remote-random=yes
+reneg-seconds=0
+ta=/home/vinnie/.cert/nm-openvpn/nordvpn-auto-tls-auth.pem
+ta-dir=1
+tunnel-mtu=1500
+username=vinnie@vcaprarola.me
+service-type=org.freedesktop.NetworkManager.openvpn
+
+[vpn-secrets]
+password=#{File.read("/home/vinnie/nordpass").strip}
+
+[ipv4]
+dns-search=
+method=auto
+
+[ipv6]
+addr-gen-mode=stable-privacy
+dns-search=
+method=auto
+END_FILE
+end
+
+def argfail
+  STDERR.puts "Please specify one of (umd|umdcs|nord|down)"
+  exit 1
+end
+
+def permfail
+  STDERR.puts "You must be root"
+  exit 1
+end
+
+VPNS = ["UMD VPN", "NordVPN", "UMD CS VPN"]
+
+def apply_best_server
+  uri = URI.parse "https://api.nordvpn.com/v1/servers/recommendations?filters[servers_technologies][identifier]=ikev2"
+  response = Net::HTTP.get_response(uri)
+
+  if response.code.to_i != 200
+    STDERR.puts "Error code #{response.code}"
+    return
+  end
+
+  data = JSON.parse response.body
+  if data.length == 0
+    STDERR.puts "No servers found"
+    return
+  end
+
+  if not data[0]["station"] =~ /172\.106\.104\.\d+/
+      config = nord_config_file data[0]["station"]
+  else
+      config = nord_config_file data[1]["station"]
+  end
+  #elsif not data[1] =~ /^172/
+  #    config = nord_config_file data[1]["station"]
+  #else
+  #    config = nord_config_file data[2]["station"]
+  #end
+
+  File.open("/etc/NetworkManager/system-connections/nordvpn-auto.nmconnection", 'w') do |file|
+    file.write config
+  end
+
+  `chown root:root /etc/NetworkManager/system-connections/nordvpn-auto.nmconnection`
+
+end
+
+
+
+# Check the commands
+argfail if ARGV.length < 1
+
+def down
+  puts "Stopping all VPNs"
+  VPNS.each do |vpn|
+    `nmcli con down "#{vpn}" 2>&1`
+  end
+end
+
+case ARGV[0]
+when "umd"
+  down
+  puts "Starting UMD VPN"
+  `echo "UMD\nvcapra1\n#{$UMD_PASS}" | nmcli con up "UMD VPN" --ask 2>&1 && sudo /usr/bin/ip route add default dev vpn0 2>&1`
+when "umdcs"
+  down
+  puts "Starting UMD CS VPN"
+  `nmcli con up "UMD CS VPN" 2>&1`
+when "nord"
+  if ARGV.include? "--best"
+    # this requires root
+    permfail unless Process.uid == 0
+
+    unless ARGV.include? "--no-connect"
+      down
+      puts "Starting NordVPN"
+    end
+
+    # Update the vpn configuration
+    apply_best_server
+
+    `nmcli con reload` unless ARGV.include? "--no-connect"
+  else
+    down 
+    puts "Starting NordVPN"
+  end
+
+  `nmcli con up "NordVPN" 2>&1` unless ARGV.include? "--no-connect"
+when "down"
+  down
+else
+  argfail
+end
+

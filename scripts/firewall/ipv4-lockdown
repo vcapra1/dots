@@ -1,0 +1,11 @@
+*filter
+
+###################
+# drop everything #
+###################
+
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT DROP
+
+COMMIT

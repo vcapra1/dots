@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+i3lock -e -k --indicator --insidecolor=ffffff66 --insidevercolor=ffffff66 --separatorcolor=00000000 --ringcolor=444444ff --keyhlcolor=44ff44ff --bshlcolor=ff4444ff --ring-width=10.0 --ringvercolor=44ff44ff --insidewrongcolor=ff444444 --ringwrongcolor=ff4444ff --linecolor=00000000 --verifcolor=44ff44ff --wrongcolor=ffffffff --veriftext="Verifying" --wrongtext="Wrong" --noinputtext="No Input" --locktext="Locking" --datestr="%a %d %b, %Y" --blur=10 --pass-media-keys

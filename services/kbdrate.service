@@ -1,0 +1,12 @@
+[Unit]
+Description=Set keyboard rate.
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+StandardInput=tty
+StandardOutput=tty
+ExecStart=/usr/bin/kbdrate -s -d 250 -r 30 > /dev/null 2> /dev/null
+
+[Install]
+WantedBy=multi-user.target

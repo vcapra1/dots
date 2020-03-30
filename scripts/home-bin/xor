@@ -1,0 +1,12 @@
+#!/bin/env ruby
+
+poem = File.read ARGV[0]
+poem_enc = File.read ARGV[1]
+
+key = poem.bytes.zip(poem_enc.bytes).map do |(a, b)|
+    a = 0 if a.nil?
+    b = 0 if b.nil?
+    a ^ b
+end
+
+print key.pack("c*")

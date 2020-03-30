@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for x in $(/bin/ls /home/vinnie/College/Current); do
+    alias $x="cd /home/vinnie/College/Current/$x"
+done

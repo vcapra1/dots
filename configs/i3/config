@@ -1,0 +1,419 @@
+##
+## Configuration for i3-gaps
+##
+
+for_window [class=".*"] border pixel 1
+gaps inner 6
+
+##
+## Keyboard rate
+##
+
+exec_always --no-startup-id xset r rate 250 30
+
+##
+## Mouse cursor settings
+##
+
+focus_follows_mouse no
+focus_on_window_activation focus
+mouse_warping none
+
+exec_always --no-startup-id unclutter --timeout 1 --ignore-scrolling
+
+##
+## Set the wallpaper
+##
+
+exec --no-startup-id feh --bg-fill ~/Pictures/Wallpapers/ArchMetal.png
+
+##
+## Start compton on i3 start
+##
+
+exec_always --no-startup-id "killall -q compton; compton -b"
+
+##
+## Color scheme for windows
+##
+
+# class                 border  backgr. text    indicator child_border
+client.focused          #4c7899 #285577 #ffffff #8888ff   #8888ff
+client.focused_inactive #333333 #5f676a #ffffff #222222   #222222
+client.unfocused        #333333 #222222 #888888 #222222   #222222
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+client.placeholder      #000000 #0c0c0c #ffffff #0c0c0c   #0c0c0c
+
+client.background       #ffffff
+
+##
+## Compose key
+##
+
+exec_always --no-startup-id setxkbmap -option compose:ralt
+
+##
+## Multimedia keys
+##
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id /home/vinnie/.i3/scripts/audio inc # && /home/vinnie/.i3/i3rust/trigger 0 # increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id /home/vinnie/.i3/scripts/audio dec # && /home/vinnie/.i3/i3rust/trigger 0 # decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle # && /home/vinnie/.i3/i3rust/trigger 0 # mute sound
+
+bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id /home/vinnie/.i3/scripts/audio inc_fine # && /home/vinnie/.i3/i3rust/trigger 0 # increase sound volume
+bindsym Shift+XF86AudioLowerVolume exec --no-startup-id /home/vinnie/.i3/scripts/audio dec_fine # && /home/vinnie/.i3/i3rust/trigger 0 # decrease sound volume
+
+# Media player controls
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause && /home/vinnie/.polybar/scripts/spotify-trigger.sh # && /home/vinnie/.i3/i3rust/trigger 1
+bindsym XF86AudioNext exec --no-startup-id playerctl next && /home/vinnie/.polybar/scripts/spotify-trigger.sh #&& /home/vinnie/.i3/i3rust/trigger 1
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous && /home/vinnie/.polybar/scripts/spotify-trigger.sh #&& /home/vinnie/.i3/i3rust/trigger 1
+
+##
+## Media mode: change track
+##
+#set $mode_media media
+#mode "$mode_media" {
+##    bindsym Left exec --no-startup-id playerctl previous && /home/vinnie/.i3/i3rust/trigger 1
+##    bindsym Right exec --no-startup-id playerctl next && /home/vinnie/.i3/i3rust/trigger 1
+#    bindsym space exec --no-startup-id playerctl play-pause && /home/vinnie/.i3/i3rust/trigger 1
+#
+##    bindsym Up exec --no-startup-id /home/vinnie/.i3/scripts/audio inc && /home/vinnie/.i3/i3rust/trigger 0 # increase sound volume
+##    bindsym Down exec --no-startup-id /home/vinnie/.i3/scripts/audio dec && /home/vinnie/.i3/i3rust/trigger 0 # decrease sound volume
+#
+#    bindsym h exec --no-startup-id playerctl previous && /home/vinnie/.i3/i3rust/trigger 1 # previous track
+#    bindsym l exec --no-startup-id playerctl next && /home/vinnie/.i3/i3rust/trigger 1 # next track
+#    bindsym k exec --no-startup-id /home/vinnie/.i3/scripts/audio inc && /home/vinnie/.i3/i3rust/trigger 0 # increase sound volume
+#    bindsym j exec --no-startup-id /home/vinnie/.i3/scripts/audio dec && /home/vinnie/.i3/i3rust/trigger 0 # decrease sound volume
+#
+#    bindsym Return mode "default"
+#    bindsym Escape mode "default"
+#    bindsym Mod4+m mode "default"
+#}
+#bindsym Mod4+m mode "$mode_media"
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec --no-startup-id set_brightness inc 100 # increase screen brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id set_brightness dec 100 # decrease screen brightness
+
+# Print Screen key
+#bindsym Print exec --no-startup-id scrot -q 100 '%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f ~/Pictures/' # take a screenshot
+#bindsym Shift+Print exec --no-startup-id scrot -q 100 -d 5 '%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f ~/Pictures/' # take a screenshot with 5-second delay
+
+#bindsym Print exec --no-startup-id /home/vinnie/.i3/scripts/screenshot
+#bindsym Shift+Print exec --no-startup-id /home/vinnie/.i3/scripts/screenshotr
+#bindsym Print exec --no-startup-id import $(date +"screenshot_%Y-%m-%d-%s.jpg")
+
+bindsym Print exec --no-startup-id flameshot gui -p /home/vinnie/Pictures/screenshots
+bindsym Shift+Print exec --no-startup-id flameshot full -p /home/vinnie/Pictures/screenshots
+
+# Screen locking
+set $alt Mod1
+set $Locker /var/myscripts/lock & sleep 1
+
+##
+## System mode: logout and shutdown commands
+##
+set $mode_system system (leshrS)
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"  
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym Control+Mod1+l mode "default"
+}
+bindsym Control+Mod1+l mode "$mode_system"
+
+## Chrome incognito
+bindsym Control+Shift+n exec --no-startup-id /usr/bin/chromium --incognito
+
+##
+## Multiple monitors
+##
+
+# By deafult set to home mode (falls back on laptop mode if no external displays connected)
+exec_always --no-startup-id /home/vinnie/.i3/scripts/displays home
+
+# Display mode
+set $mode_display display (lhfpm)
+mode "$mode_display" {
+    bindsym l exec --no-startup-id /home/vinnie/.i3/scripts/displays laptop, mode "default"
+    bindsym h exec --no-startup-id /home/vinnie/.i3/scripts/displays home, mode "default"
+    bindsym f exec --no-startup-id /home/vinnie/.i3/scripts/displays first, mode "default"
+    bindsym p exec --no-startup-id /home/vinnie/.i3/scripts/displays presenter, mode "default"
+    bindsym m exec --no-startup-id /home/vinnie/.i3/scripts/displays mirror, mode "default"
+
+    bindsym Escape mode "default"
+    bindsym Mod4+p mode "default"
+}
+bindsym Mod4+p mode "$mode_display"
+
+##
+## General i3 config
+##
+
+# Set the default mod key (Windows/Start key)
+set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:monospace 8
+
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+#font pango:DejaVu Sans Mono 8
+
+# Before i3 v4.8, we used to recommend this one as the default:
+# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, its unicode glyph coverage is limited, the old
+# X core fonts rendering does not support right-to-left and this being a bitmap
+# font, it doesn’t scale on retina/hidpi displays.
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec --no-startup-id terminator
+bindsym $mod+Shift+Return exec --no-startup-id terminator -T "Floating_Terminator"
+bindsym $mod+Shift+p exec --no-startup-id terminator -T "Floating_Terminator" -p "NoLogin" -x "ipython"
+
+# make floating terminator actually floating
+for_window [instance="terminator" title="Floating_Terminator"] floating enable, move up 200, move left 210, move scratchpad, scratchpad show
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# start dmenu (a program launcher)
+bindsym $mod+d exec rofi -show drun -m $(i3-msg -t get_workspaces | jq '.[] | select(.focused) | .output' | sed 's/\"//g')
+bindsym XF86Search exec rofi -show drun -m $(i3-msg -t get_workspaces | jq '.[] | select(.focused) | .output' | sed 's/\"//g')
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# alternatively, you can use the cursor keys:
+#bindsym $mod+Left focus left
+#bindsym $mod+Down focus down
+#bindsym $mod+Up focus up
+#bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# alternatively, you can use the cursor keys:
+#bindsym $mod+Shift+Left move left
+#bindsym $mod+Shift+Down move down
+#bindsym $mod+Shift+Up move up
+#bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+c split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+#bindsym $mod+s layout stacking
+#bindsym $mod+w layout tabbed
+#bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+#bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# move focused workspace to monitor
+bindsym $mod+Control+h move workspace to output left
+bindsym $mod+Control+j move workspace to output down
+bindsym $mod+Control+k move workspace to output up
+bindsym $mod+Control+l move workspace to output right
+
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        #bindsym Left resize shrink width 10 px or 10 ppt
+        #bindsym Down resize grow height 10 px or 10 ppt
+        #bindsym Up resize shrink height 10 px or 10 ppt
+        #bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
+###
+### Show this bar on only the internal screen either in laptop-only mode or presenter mode
+###
+#bar {
+#    output eDP-1
+#    id internal
+#
+#    mode hide
+#    modifier none
+#
+#    wheel_up_cmd nop
+#    wheel_down_cmd nop
+#    tray_output none
+#    font pango: DejaVu Sans Mono, FontAwesomeCustom 7
+##    font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+#    i3bar_command i3bar -t
+##    status_command i3status | /home/vinnie/.i3/i3spotifystatus/pystatus.py #i3blocks/home/vinnie/.i3/i3rust/target/debug/i3rust
+#    status_command /home/vinnie/.i3/i3rust/target/release/i3rust
+#    colors {
+#        separator #666666
+#        background #00000044
+#        statusline #dddddd
+#        focused_workspace #0088CC #0088CC #ffffff
+#        active_workspace #333333 #333333 #ffffff
+#        inactive_workspace #333333 #333333 #888888
+#        urgent_workspace #e0343a #e0343a #ffffff
+#    }
+#}
+#
+#
+###
+### Show this bar on every screen when multiple devices monitors are being used
+###
+#bar {
+#    id all
+#
+#    mode hide
+#    modifier none
+#
+#    wheel_up_cmd nop
+#    wheel_down_cmd nop
+#    tray_output none
+#    font pango: DejaVu Sans Mono, FontAwesomeCustom 7
+#    i3bar_command i3bar -t
+##    status_command i3status | /home/vinnie/.i3/i3spotifystatus/pystatus.py #i3blocks
+#    status_command /home/vinnie/.i3/i3rust/target/release/i3rust
+#    colors {
+#        separator #666666
+#        background #00000044
+#        statusline #dddddd
+#        focused_workspace #0088CC #0088CC #ffffff
+#        active_workspace #333333 #333333 #ffffff
+#        inactive_workspace #333333 #333333 #888888
+#        urgent_workspace #e0343a #e0343a #ffffff
+#    }
+#}
+#
+###
+### Show this bar on external screens in presenter mode
+###
+#bar {
+#    output DP-1
+#    output DP-2
+#    output HDMI-1
+#    output HDMI-2
+#    id presenter
+#
+#    mode hide
+#    modifier Mod4
+#
+#    wheel_up_cmd nop
+#    wheel_down_cmd nop
+#    tray_output none
+#    font pango: DejaVu Sans Mono, FontAwesomeCustom 14
+#    i3bar_command i3bar -t
+##    status_command i3status | /home/vinnie/.i3/i3spotifystatus/pystatus.py #i3blocks
+##    status_command /home/vinnie/.i3/i3rust/target/release/i3rust
+#    colors {
+#        separator #666666
+#        background #00000000
+#        statusline #dddddd
+#        focused_workspace #0088CC #0088CC #ffffff
+#        active_workspace #333333 #333333 #ffffff
+#        inactive_workspace #333333 #333333 #888888
+#        urgent_workspace #e0343a #e0343a #ffffff
+#    }
+#}
