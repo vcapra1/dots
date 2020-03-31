@@ -38,7 +38,7 @@ font-6 = Noto Sans:style=Bold:size=7.5;0
 font-7 = font\-logos:size=10;0.5
 
 modules-left = i3
-modules-right = spotify sep cpu_usage cpu_temp cpu_fan sep memory swap sep bluetooth sep wifi sep volume sep battery sep date sep arch
+modules-right = spotify sep cpu_usage cpu_temp cpu_fan sep memory swap sep bluetooth sep wifi vpn sep volume sep battery sep date sep arch
 
 ;[module/xbacklight]
 ;type = internal/xbacklight
@@ -238,7 +238,7 @@ bar-swap-used-empty-foreground = #447D4A91
 
 [module/bluetooth]
 type = custom/script
-interval = 2
+interval = 3
 exec = ~/.polybar/scripts/bluetooth.sh
 format = <label>
 label = %output%
@@ -246,7 +246,7 @@ label = %output%
 [module/wifi]
 type = internal/network
 interface = wlp2s0
-interval = 2.0
+interval = 3.0
 ;ping-interval = 10
 
 format-connected = <ramp-signal> <label-connected>
@@ -335,7 +335,13 @@ content-foreground = #1793D1
 content-padding = 0
 content-font = 8
 
+[module/vpn]
+type = custom/script
+interval = 2.0
+exec = ~/.polybar/scripts/vpn.sh
 
+tail = true
+format-foreground = #4DD14D
 
 
 [module/mpd]

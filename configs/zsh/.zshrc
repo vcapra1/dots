@@ -143,6 +143,7 @@ alias lscan="python2 /home/vinnie/lscan/lscan.py"
 alias new="terminator"
 alias column="$HOME/Projects/column-rs/target/release/column-rs"
 alias urldecode='sed "s@+@ @g;s@%@\\\\x@g" | xargs -0 printf "%b"'
+alias exiftool='exiftool -c "%.6f"'
 
 # Because I can never remember this command
 alias fixbt="echo \"pacmd set-card-profile card_number a2dp_sink\""

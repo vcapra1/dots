@@ -1,9 +1,10 @@
 [Unit]
-Description=Start Parcellite daemonj
+Description=Start Parcellite daemon
 
 [Service]
 Type=simple
 Restart=always
+RestartSec=5
 User=vinnie
 ExecStart=/usr/bin/parcellite
 
