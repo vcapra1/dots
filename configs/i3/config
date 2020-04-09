@@ -187,6 +187,9 @@ bindsym $mod+Shift+p exec --no-startup-id terminator -T "Floating_Terminator" -p
 # make floating terminator actually floating
 for_window [instance="terminator" title="Floating_Terminator"] floating enable, move up 200, move left 210, move scratchpad, scratchpad show
 
+# make zoom window floating by default
+for_window [class="zoom"] floating enable
+
 # kill focused window
 bindsym $mod+Shift+q kill
 

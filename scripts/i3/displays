@@ -33,9 +33,9 @@ def mode name, displays={}
             if disp[:internal] then
                 1
             elsif output =~ /DP/ and disp[:connected] then
-                0
-            elsif output =~ /HDMI/ and disp[:connected] then
                 2
+            elsif output =~ /HDMI/ and disp[:connected] then
+                0
             else
                 3
             end

@@ -200,3 +200,6 @@ export GPG_TTY=$(tty)
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh//.p10k.zsh.
 [[ ! -f ~/.config/zsh//.p10k.zsh ]] || source ~/.config/zsh//.p10k.zsh
+
+# ZSH Syntax Highlighting MUST BE AT END!
+#source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

@@ -1,7 +1,18 @@
 #!/bin/env ruby
 
-poem = File.read ARGV[0]
-poem_enc = File.read ARGV[1]
+files = false
+if ARGV.include? "--files" then
+    files = true
+    ARGV.delete "--files"
+end
+
+if files then
+    poem = File.read ARGV[0]
+    poem_enc = File.read ARGV[1]
+else
+    poem = ARGV[0]
+    poem_enc = ARGV[1]
+end
 
 key = poem.bytes.zip(poem_enc.bytes).map do |(a, b)|
     a = 0 if a.nil?
