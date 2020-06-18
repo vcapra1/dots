@@ -8,7 +8,11 @@ end
 
 if files then
     poem = File.read ARGV[0]
-    poem_enc = File.read ARGV[1]
+    if ARGV[1] == "-" then
+        poem_enc = $stdin.read
+    else
+        poem_enc = File.read ARGV[1]
+    end
 else
     poem = ARGV[0]
     poem_enc = ARGV[1]

@@ -84,4 +84,11 @@
 -A OUTPUT -o tun0 -j ACCEPT
 -A OUTPUT -o vpn0 -j ACCEPT
 
+#######################
+# Allow local traffic #
+#######################
+
+-A INPUT -p tcp -s localhost -j ACCEPT
+-A INPUT -p udp -s localhost -j ACCEPT
+
 COMMIT

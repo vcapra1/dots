@@ -13,6 +13,9 @@ cp ~/.profile ./configs
 # Terminator
 cp -r ~/.config/terminator ./configs
 
+# Alacritty
+cp -r ~/.config/alacritty/alacritty.yml ./configs
+
 # Vim
 mkdir -p ./configs/nvim
 cp ~/.config/nvim/init.vim ./configs/nvim

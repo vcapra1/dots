@@ -79,7 +79,7 @@ if (empty($TMUX))
 endif
 
 " Polyglot config
-let g:polyglot_disabled = ['latex', 'rust']
+let g:polyglot_disabled = ['latex', 'rust', 'markdown', 'javascript', 'javascript.jsx', 'jsx']
 
 " Git gutter delay
 set updatetime=100
@@ -111,6 +111,9 @@ hi Normal guibg=NONE ctermbg=NONE
 let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
 "execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
+" Markdown code block highlighting
+let g:markdown_fenced_languages = ['ocaml', 'rust', 'c', 'java', 'js=javascript', 'json=javascript', 'ruby', 'xml', 'css', 'html', 'python']
+
 " Tab settings: 4 spaces
 filetype plugin indent on
 set tabstop=4
@@ -121,4 +124,3 @@ set expandtab
 :autocmd Filetype ruby set softtabstop=4
 :autocmd Filetype ruby set sw=4
 :autocmd Filetype ruby set ts=4
-

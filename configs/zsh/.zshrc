@@ -1,15 +1,4 @@
 ########################################################################
-############################# Powerlevel10k ############################
-########################################################################
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh//.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-########################################################################
 ############################### ZSH setup ##############################
 ########################################################################
 
@@ -17,11 +6,19 @@ autoload -Uz compinit promptinit up-line-or-beginning-search down-line-or-beginn
 compinit
 promptinit
 
-if [[ $(tty) =~ "/dev/tty*" ]]; then
+if [[ ! $DISPLAY ]]; then
     # TTY
     prompt adam2
 else
     # X Terminal
+
+    # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh//.zshrc.
+    # Initialization code that may require console input (password prompts, [y/n]
+    # confirmations, etc.) must go above this block; everything else may go below.
+    if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+      source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    fi
+
     export TERM="xterm-256color"
 
     # Enable Powerlevel10k
@@ -140,7 +137,7 @@ alias arduion='arduino'
 alias github='x=$(git remote get-url origin) && chromium $x > /dev/null 2> /dev/null &!'
 alias fd="fd --no-ignore-vcs"
 alias lscan="python2 /home/vinnie/lscan/lscan.py"
-alias new="terminator"
+alias new="alacritty"
 alias column="$HOME/Projects/column-rs/target/release/column-rs"
 alias urldecode='sed "s@+@ @g;s@%@\\\\x@g" | xargs -0 printf "%b"'
 alias exiftool='exiftool -c "%.6f"'

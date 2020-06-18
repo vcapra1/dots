@@ -1,5 +1,6 @@
 e scr.color=2
 e scr.utf8=true
 e dbg.slow=true
-e bin.strings=false
+# e bin.strings=false
+e prj.simple=true
 eco onedark
